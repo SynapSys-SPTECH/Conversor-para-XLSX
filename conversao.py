@@ -39,6 +39,7 @@ def csv_to_xlsx(csv_folder, chunksize=None):
                 # Constrói os nomes de saída para os dois arquivos XLSX
                 first_part_xlsx_file = os.path.join(output_folder, os.path.splitext(file_name)[0] + '_parte1.xlsx')
                 second_part_xlsx_file = os.path.join(output_folder, os.path.splitext(file_name)[0] + '_parte2.xlsx')
+                combined_xlsx_file = os.path.join(output_folder, os.path.splitext(file_name)[0] + '_combinado.xlsx')
 
                 # Salva a primeira parte (linhas 1 a 7, duas primeiras colunas)
                 first_part_df.to_excel(first_part_xlsx_file, index=False)
@@ -47,6 +48,11 @@ def csv_to_xlsx(csv_folder, chunksize=None):
                 # Salva a segunda parte (linhas 8 até o final, todas as colunas)
                 second_part_df.to_excel(second_part_xlsx_file, index=False)
                 print(f"As linhas a partir da 8ª foram salvas em {second_part_xlsx_file}.")
+
+                # Combina os dois DataFrames
+                combined_df = pd.concat([first_part_df, second_part_df], axis=1)
+                combined_df.to_excel(combined_xlsx_file, index=False)
+                print(f"O arquivo combinado foi salvo em {combined_xlsx_file}.")
                 
             except UnicodeDecodeError as e:
                 print(f"Erro ao processar o arquivo {file_name}: {e}")
